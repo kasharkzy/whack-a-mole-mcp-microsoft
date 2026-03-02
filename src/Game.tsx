@@ -4,6 +4,7 @@ import ScoreDisplay from './components/ScoreDisplay';
 import HitsDisplay from './components/HitsDisplay';
 import Timer from './components/Timer';
 import DifficultySelector from './components/DifficultySelector';
+import HitsCard from './components/HitsCard';
 import type { GameStatus, MoleState, Difficulty, DifficultySettings } from './types';
 import './Game.css';
 
@@ -39,6 +40,7 @@ const Game: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState(30);
   const [gameStatus, setGameStatus] = useState<GameStatus>('idle');
   const [difficulty, setDifficulty] = useState<Difficulty>('medium');
+  const [consecutiveHits, setConsecutiveHits] = useState(0);
   const [moles, setMoles] = useState<MoleState[]>(
     Array.from({ length: TOTAL_HOLES }, (_, i) => ({ id: i, isActive: false }))
   );
@@ -77,11 +79,15 @@ const Game: React.FC = () => {
         return newMoles;
       });
 
-      // Hide the mole after visible time
+      // Hide the mole after visible time; if still active, the player missed → reset streak
       setTimeout(() => {
         setMoles((prevMoles) => {
           const newMoles = [...prevMoles];
-          newMoles[randomIndex] = { ...newMoles[randomIndex], isActive: false };
+          if (newMoles[randomIndex].isActive) {
+            // Mole was not whacked — break the streak
+            setConsecutiveHits(0);
+            newMoles[randomIndex] = { ...newMoles[randomIndex], isActive: false };
+          }
           return newMoles;
         });
       }, currentSettings.moleVisibleTime);
@@ -134,6 +140,7 @@ const Game: React.FC = () => {
           <div className="difficulty-badge" style={{ background: currentSettings.color }}>
             {currentSettings.label}
           </div>
+          <HitsCard consecutiveHits={consecutiveHits} />
           <Timer timeLeft={timeLeft} />
         </div>
       )}
