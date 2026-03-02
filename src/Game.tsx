@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import GameBoard from './components/GameBoard';
 import ScoreDisplay from './components/ScoreDisplay';
+import HitsDisplay from './components/HitsDisplay';
 import Timer from './components/Timer';
 import DifficultySelector from './components/DifficultySelector';
 import type { GameStatus, MoleState, Difficulty, DifficultySettings } from './types';
@@ -129,6 +130,7 @@ const Game: React.FC = () => {
       {gameStatus === 'playing' && (
         <div className="game-info">
           <ScoreDisplay score={score} />
+          <HitsDisplay hits={hits} />
           <div className="difficulty-badge" style={{ background: currentSettings.color }}>
             {currentSettings.label}
           </div>
@@ -158,7 +160,7 @@ const Game: React.FC = () => {
               Difficulty: <span style={{ color: currentSettings.color }}>{currentSettings.label}</span>
             </p>
             <p className="final-score">Final Score: {score}</p>
-            <p className="final-hits">Total Hits: {hits}</p>
+            <HitsDisplay hits={hits} />
             <button className="game-button" onClick={restartGame}>
               Play Again
             </button>
