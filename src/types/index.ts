@@ -9,6 +9,7 @@ export type Difficulty = 'easy' | 'medium' | 'hard';
 
 export interface GameState {
   score: number;
+  hits: number;
   timeLeft: number;
   status: GameStatus;
   moles: MoleState[];

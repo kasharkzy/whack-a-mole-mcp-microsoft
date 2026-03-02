@@ -34,6 +34,7 @@ const DIFFICULTY_SETTINGS: Record<Difficulty, DifficultySettings> = {
 
 const Game: React.FC = () => {
   const [score, setScore] = useState(0);
+  const [hits, setHits] = useState(0);
   const [timeLeft, setTimeLeft] = useState(30);
   const [gameStatus, setGameStatus] = useState<GameStatus>('idle');
   const [difficulty, setDifficulty] = useState<Difficulty>('medium');
@@ -95,6 +96,11 @@ const Game: React.FC = () => {
       if (newMoles[moleId].isActive) {
         newMoles[moleId] = { ...newMoles[moleId], isActive: false };
         setScore((prev) => prev + 1);
+        setHits((prev) => {
+          const newHits = prev + 1;
+          console.log(`[Whack-a-Mole] Hit registered on mole ${moleId}. Total hits: ${newHits}`);
+          return newHits;
+        });
       }
       return newMoles;
     });
@@ -102,6 +108,7 @@ const Game: React.FC = () => {
 
   const startGame = () => {
     setScore(0);
+    setHits(0);
     setTimeLeft(currentSettings.gameDuration);
     setGameStatus('playing');
     setMoles(Array.from({ length: TOTAL_HOLES }, (_, i) => ({ id: i, isActive: false })));
@@ -110,6 +117,7 @@ const Game: React.FC = () => {
   const restartGame = () => {
     setGameStatus('idle');
     setScore(0);
+    setHits(0);
     setTimeLeft(currentSettings.gameDuration);
     setMoles(Array.from({ length: TOTAL_HOLES }, (_, i) => ({ id: i, isActive: false })));
   };
@@ -150,6 +158,7 @@ const Game: React.FC = () => {
               Difficulty: <span style={{ color: currentSettings.color }}>{currentSettings.label}</span>
             </p>
             <p className="final-score">Final Score: {score}</p>
+            <p className="final-hits">Total Hits: {hits}</p>
             <button className="game-button" onClick={restartGame}>
               Play Again
             </button>
