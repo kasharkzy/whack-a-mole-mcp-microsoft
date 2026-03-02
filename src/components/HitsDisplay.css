@@ -1,0 +1,20 @@
+.hits-display {
+  background: #00BCD4;
+  padding: 15px 30px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+}
+
+.hits-label {
+  font-size: 24px;
+  color: #fff;
+}
+
+.hits-value {
+  font-size: 36px;
+  color: #fff;
+}
